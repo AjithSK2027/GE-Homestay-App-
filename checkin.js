@@ -230,50 +230,35 @@ function validateCheckin(data) {
 
   if(!data.guest_name){
 
-    showToast(
-      "Enter guest name"
-    );
-
+    showToast("Enter guest name");
     return false;
 
   }
 
   if(!data.phone_number){
 
-    showToast(
-      "Enter phone number"
-    );
-
+    showToast("Enter phone number");
     return false;
 
   }
 
-  if(selectedRooms.length === 0)
-{
-  showToast(
-    "Select at least one room"
-  );
-  return false;
-}
+  if(selectedRooms.length === 0){
+
+    showToast("Select at least one room");
+    return false;
 
   }
 
   if(!data.guests_count){
 
-    showToast(
-      "Enter guest count"
-    );
-
+    showToast("Enter guest count");
     return false;
 
   }
 
   if(!data.nights){
 
-    showToast(
-      "Enter nights"
-    );
-
+    showToast("Enter nights");
     return false;
 
   }
@@ -533,23 +518,9 @@ function showSuccessToast(
 // PRESELECT ROOM
 // =====================================
 
-function preselectRoom(
-  roomName
-){
+function preselectRoom(roomName){
 
   openCheckinModal();
-
-  const room =
-    document.getElementById(
-      "roomSelect"
-    );
-
-  if(room){
-
-    room.value =
-      roomName;
-
-  }
 
 }
 
