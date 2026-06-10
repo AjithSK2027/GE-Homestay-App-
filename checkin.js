@@ -1,8 +1,9 @@
 // =====================================
-// CHECK-IN ENGINE
+// CHECK-IN ENGINE (FULLY CORRECTED)
 // =====================================
 
 let selectedRooms = [];
+let checkinForm = null;               // DECLARED HERE
 
 // =====================================
 // INIT
@@ -10,10 +11,7 @@ let selectedRooms = [];
 
 function initializeCheckin() {
 
-  checkinForm =
-    document.getElementById(
-      "checkinForm"
-    );
+  checkinForm = document.getElementById("checkinForm");
 
   bindCheckinEvents();
 
@@ -27,156 +25,107 @@ function initializeCheckin() {
 
 function bindCheckinEvents() {
 
-  const fab =
-    document.getElementById(
-      "fab"
-    );
+  const fab = document.getElementById("fab");
 
-  if(fab){
-
-    fab.addEventListener(
-      "click",
-      openCheckinModal
-    );
-
+  if (fab) {
+    fab.addEventListener("click", openCheckinModal);
   }
 
-  const closeBtn =
-    document.querySelector(
-      ".close-modal"
-    );
+  const closeBtn = document.querySelector(".close-modal");
 
-  if(closeBtn){
-
-    closeBtn.addEventListener(
-      "click",
-      closeCheckinModal
-    );
-
+  if (closeBtn) {
+    closeBtn.addEventListener("click", closeCheckinModal);
   }
 
-  if(checkinForm){
-
-    checkinForm.addEventListener(
-      "submit",
-      submitCheckin
-    );
-
+  if (checkinForm) {
+    checkinForm.addEventListener("submit", submitCheckin);
   }
 
 }
 
 // =====================================
-// LOAD ROOMS
+// LOAD ROOMS (SAFE)
 // =====================================
 
 async function loadAvailableRooms() {
 
   try {
 
-    const rooms =
-      await getRooms();
+    const rooms = await getRooms();
 
-    console.log(
-      "Rooms Loaded",
-      rooms
-    );
+    console.log("Rooms Loaded", rooms);
 
-    const container =
-      document.getElementById(
-        "roomSelector"
-      );
+    const container = document.getElementById("roomSelector");
+
+    if (!container) {
+      console.warn("roomSelector element not found");
+      return;
+    }
 
     container.innerHTML = "";
 
+    // ✅ Guard against null/undefined rooms
+    if (!rooms || !Array.isArray(rooms) || rooms.length === 0) {
+      container.innerHTML = '<div class="error-msg">⚠️ No rooms configured. Check API settings.</div>';
+      return;
+    }
+
     rooms.forEach(room => {
 
-      const card =
-        document.createElement(
-          "div"
-        );
+      const card = document.createElement("div");
+      card.className = "room-option";
+      card.innerHTML = `<div class="room-name">${escapeHtml(room.room_name)}</div>`;
 
-      card.className =
-        "room-option";
+      card.onclick = () => toggleRoom(room.room_name, card);
 
-      card.innerHTML = `
-
-        <div class="room-name">
-          ${room.room_name}
-        </div>
-
-      `;
-
-      card.onclick = () => {
-
-        toggleRoom(
-          room.room_name,
-          card
-        );
-
-      };
-
-      container.appendChild(
-        card
-      );
+      container.appendChild(card);
 
     });
 
-  }
+  } catch (error) {
 
-  catch(error) {
-
-    console.error(
-      "Room Loading Error",
-      error
-    );
+    console.error("Room Loading Error", error);
+    showToast("Could not load rooms. Check API URL.");
 
   }
 
 }
 
-function toggleRoom(
-  roomName,
-  card
-) {
+// Helper to prevent XSS
+function escapeHtml(str) {
+  if (!str) return '';
+  return str.replace(/[&<>]/g, function(m) {
+    if (m === '&') return '&amp;';
+    if (m === '<') return '&lt;';
+    if (m === '>') return '&gt;';
+    return m;
+  });
+}
 
-  if(
-    selectedRooms.includes(
-      roomName
-    )
-  ) {
+// =====================================
+// TOGGLE ROOM SELECTION
+// =====================================
 
-    selectedRooms =
-      selectedRooms.filter(
-        room =>
-        room !== roomName
-      );
+function toggleRoom(roomName, card) {
 
-    card.classList.remove(
-      "selected"
-    );
+  if (selectedRooms.includes(roomName)) {
 
-  }
-  else {
+    selectedRooms = selectedRooms.filter(room => room !== roomName);
+    card.classList.remove("selected");
 
-    selectedRooms.push(
-      roomName
-    );
+  } else {
 
-    card.classList.add(
-      "selected"
-    );
+    selectedRooms.push(roomName);
+    card.classList.add("selected");
 
   }
 
-  document.getElementById(
-    "selectedRoomCount"
-  ).innerText =
-    selectedRooms.length;
+  const countSpan = document.getElementById("selectedRoomCount");
+  if (countSpan) {
+    countSpan.innerText = selectedRooms.length;
+  }
 
-  console.log(
-    selectedRooms
-  );
+  console.log("Selected rooms:", selectedRooms);
 
 }
 
@@ -186,18 +135,15 @@ function toggleRoom(
 
 function openCheckinModal() {
 
-  const modal =
-    document.getElementById(
-      "checkinModal"
-    );
+  const modal = document.getElementById("checkinModal");
+  if (modal) modal.classList.add("active");
 
-  if(modal){
-
-    modal.classList.add(
-      "active"
-    );
-
-  }
+  // Reset selected rooms when opening modal? (Optional - but improves UX)
+  // Uncomment next line if you want fresh selection each time
+  // selectedRooms = [];
+  // const countSpan = document.getElementById("selectedRoomCount");
+  // if (countSpan) countSpan.innerText = "0";
+  // document.querySelectorAll(".room-option").forEach(card => card.classList.remove("selected"));
 
 }
 
@@ -207,18 +153,8 @@ function openCheckinModal() {
 
 function closeCheckinModal() {
 
-  const modal =
-    document.getElementById(
-      "checkinModal"
-    );
-
-  if(modal){
-
-    modal.classList.remove(
-      "active"
-    );
-
-  }
+  const modal = document.getElementById("checkinModal");
+  if (modal) modal.classList.remove("active");
 
 }
 
@@ -228,39 +164,29 @@ function closeCheckinModal() {
 
 function validateCheckin(data) {
 
-  if(!data.guest_name){
-
+  if (!data.guest_name) {
     showToast("Enter guest name");
     return false;
-
   }
 
-  if(!data.phone_number){
-
+  if (!data.phone_number) {
     showToast("Enter phone number");
     return false;
-
   }
 
-  if(selectedRooms.length === 0){
-
+  if (selectedRooms.length === 0) {
     showToast("Select at least one room");
     return false;
-
   }
 
-  if(!data.guests_count){
-
-    showToast("Enter guest count");
+  if (!data.guests_count || data.guests_count < 1) {
+    showToast("Enter valid guest count");
     return false;
-
   }
 
-  if(!data.nights){
-
-    showToast("Enter nights");
+  if (!data.nights || data.nights < 1) {
+    showToast("Enter valid number of nights");
     return false;
-
   }
 
   return true;
@@ -268,142 +194,68 @@ function validateCheckin(data) {
 }
 
 // =====================================
-// SUBMIT
+// SUBMIT CHECK-IN
 // =====================================
 
 async function submitCheckin(event) {
 
   event.preventDefault();
 
-  const submitBtn =
-    document.querySelector(
-      ".primary-btn"
-    );
+  const submitBtn = document.querySelector("#checkinForm .primary-btn");
+  if (!submitBtn) return;
 
   submitBtn.disabled = true;
-
-  submitBtn.innerText =
-    "Checking In...";
+  submitBtn.innerText = "Checking In...";
 
   const payload = {
-
-    guest_name:
-      document.getElementById(
-        "guestName"
-      ).value.trim(),
-
-    phone_number:
-      document.getElementById(
-        "phoneNumber"
-      ).value.trim(),
-
-    room_type:
-  selectedRooms.join(","),
-
-    guests_count:
-      Number(
-        document.getElementById(
-          "guestCount"
-        ).value
-      ),
-
-    nights:
-      Number(
-        document.getElementById(
-          "nights"
-        ).value
-      ),
-
-    meal_plan:
-      document.getElementById(
-        "mealPlan"
-      ).value,
-
-    advance_paid:
-      Number(
-        document.getElementById(
-          "advancePaid"
-        ).value || 0
-      ),
-
-    advance_payment_mode:
-      document.getElementById(
-        "paymentMode"
-      ).value,
-
-    advance_received_by:
-      "Reception",
-
-    check_in_date:
-      new Date()
-      .toISOString()
-      .split("T")[0],
-
-    note:
-      document.getElementById(
-        "notes"
-      ).value
-
+    guest_name: document.getElementById("guestName").value.trim(),
+    phone_number: document.getElementById("phoneNumber").value.trim(),
+    room_type: selectedRooms.join(","),
+    guests_count: Number(document.getElementById("guestCount").value),
+    nights: Number(document.getElementById("nights").value),
+    meal_plan: document.getElementById("mealPlan").value,
+    advance_paid: Number(document.getElementById("advancePaid").value || 0),
+    advance_payment_mode: document.getElementById("paymentMode").value,
+    advance_received_by: "Reception",
+    check_in_date: new Date().toISOString().split("T")[0],
+    note: document.getElementById("notes").value
   };
 
-  if(
-    !validateCheckin(
-      payload
-    )
-  ){
-
+  if (!validateCheckin(payload)) {
     submitBtn.disabled = false;
-
-    submitBtn.innerText =
-      "Check In";
-
+    submitBtn.innerText = "Check In";
     return;
-
   }
 
   try {
 
-    const result =
-      await createCheckin(
-        payload
-      );
+    const result = await createCheckin(payload);
 
-    if(result){
-
-      sendOwnerCheckinMessage(
-        payload
-      );
-
+    if (result && result.success !== false) {   // adjust if your API returns different success indicator
+      sendOwnerCheckinMessage(payload);
       resetCheckinForm();
-
       closeCheckinModal();
 
-      await loadDashboard();
+      // Refresh UI
+      if (typeof loadDashboard === "function") await loadDashboard();
+      if (typeof loadAvailableRooms === "function") await loadAvailableRooms();
 
-      await loadAvailableRooms();
-
-      showSuccessToast(
-        "Guest Checked In"
-      );
-
+      showSuccessToast("Guest Checked In");
+    } else {
+      throw new Error("API returned failure");
     }
 
+  } catch (error) {
+
+    console.error("Check-in error:", error);
+    showToast("Check-in failed. Check API connectivity.");
+
+  } finally {
+
+    submitBtn.disabled = false;
+    submitBtn.innerText = "Check In";
+
   }
-
-  catch(error){
-
-    console.error(error);
-
-    showToast(
-      "Check-in failed"
-    );
-
-  }
-
-  submitBtn.disabled = false;
-
-  submitBtn.innerText =
-    "Check In";
 
 }
 
@@ -413,57 +265,42 @@ async function submitCheckin(event) {
 
 function resetCheckinForm() {
 
-  if(
-    !checkinForm
-  ) return;
+  if (!checkinForm) return;
 
   checkinForm.reset();
+
+  // Also reset selected rooms
+  selectedRooms = [];
+  const countSpan = document.getElementById("selectedRoomCount");
+  if (countSpan) countSpan.innerText = "0";
+
+  document.querySelectorAll(".room-option").forEach(card => {
+    card.classList.remove("selected");
+  });
 
 }
 
 // =====================================
-// OWNER WHATSAPP
+// OWNER WHATSAPP NOTIFICATION
 // =====================================
 
-function sendOwnerCheckinMessage(
-  booking
-){
+function sendOwnerCheckinMessage(booking) {
 
-  if(
-    !CONFIG.OWNER_PHONE
-  ) return;
+  if (!CONFIG.OWNER_PHONE) return;
 
-  const msg =
-
-`🏡 GOOD EARTH HOMESTAY
+  const msg = `🏡 GOOD EARTH HOMESTAY
 
 New Check-In
 
-Guest:
-${booking.guest_name}
+Guest: ${booking.guest_name}
+Room: ${booking.room_type}
+Guests: ${booking.guests_count}
+Nights: ${booking.nights}
+Advance: ₹${booking.advance_paid}
+Meal Plan: ${booking.meal_plan}
+Phone: ${booking.phone_number}`;
 
-Room:
-${booking.room_type}
-
-Guests:
-${booking.guests_count}
-
-Nights:
-${booking.nights}
-
-Advance:
-₹${booking.advance_paid}
-
-Meal Plan:
-${booking.meal_plan}
-
-Phone:
-${booking.phone_number}`;
-
-  sendWhatsApp(
-    CONFIG.OWNER_PHONE,
-    msg
-  );
+  sendWhatsApp(CONFIG.OWNER_PHONE, msg);
 
 }
 
@@ -471,68 +308,54 @@ ${booking.phone_number}`;
 // SUCCESS TOAST
 // =====================================
 
-function showSuccessToast(
-  message
-){
+function showSuccessToast(message) {
 
-  let toast =
-    document.querySelector(
-      ".toast"
-    );
+  let toast = document.querySelector(".toast");
 
-  if(!toast){
-
-    toast =
-      document.createElement(
-        "div"
-      );
-
-    toast.className =
-      "toast";
-
-    document.body.appendChild(
-      toast
-    );
-
+  if (!toast) {
+    toast = document.createElement("div");
+    toast.className = "toast";
+    document.body.appendChild(toast);
   }
 
-  toast.innerText =
-    message;
-
-  toast.classList.add(
-    "success",
-    "show"
-  );
+  toast.innerText = message;
+  toast.classList.add("success", "show");
 
   setTimeout(() => {
-
-    toast.classList.remove(
-      "show"
-    );
-
-  },2500);
+    toast.classList.remove("show");
+  }, 2500);
 
 }
 
 // =====================================
-// PRESELECT ROOM
+// PRESELECT ROOM (FIXED)
 // =====================================
 
-function preselectRoom(roomName){
+function preselectRoom(roomName) {
 
   openCheckinModal();
 
+  // Wait a tiny bit for modal animation and room options to render
+  setTimeout(() => {
+    const roomOptions = document.querySelectorAll(".room-option");
+    for (let opt of roomOptions) {
+      const nameDiv = opt.querySelector(".room-name");
+      if (nameDiv && nameDiv.innerText.trim() === roomName) {
+        // If not already selected, click it
+        if (!selectedRooms.includes(roomName)) {
+          opt.click();
+        }
+        break;
+      }
+    }
+  }, 100);
+
 }
 
 // =====================================
-// START
+// START ON PAGE LOAD
 // =====================================
 
-document.addEventListener(
-  "DOMContentLoaded",
-  () => {
-
-    initializeCheckin();
-
-  }
-);
+document.addEventListener("DOMContentLoaded", () => {
+  initializeCheckin();
+});
