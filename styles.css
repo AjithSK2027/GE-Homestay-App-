@@ -705,3 +705,70 @@ textarea:focus{
   cursor: not-allowed;
 
 }
+
+.room-selector {
+
+    display: grid;
+
+    grid-template-columns:
+        repeat(2,1fr);
+
+    gap: 12px;
+
+    margin-top: 12px;
+
+}
+
+.room-option {
+
+    padding: 16px;
+
+    border-radius: 14px;
+
+    border: 2px solid #e5e7eb;
+
+    background: #ffffff;
+
+    cursor: pointer;
+
+    transition: all .2s ease;
+
+    font-weight: 600;
+
+}
+
+.room-option:hover {
+
+    transform: translateY(-2px);
+
+}
+
+.room-option.selected {
+
+    background: #eff6ff;
+
+    border-color: #2563eb;
+
+    color: #2563eb;
+
+}
+
+.room-option.occupied {
+
+    background: #fee2e2;
+
+    border-color: #dc2626;
+
+    color: #991b1b;
+
+    cursor: not-allowed;
+
+}
+
+.room-selection-info {
+
+    margin-top: 12px;
+
+    font-weight: 600;
+
+}
