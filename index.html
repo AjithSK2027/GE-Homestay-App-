@@ -195,7 +195,10 @@ class="fab">
 
 <!-- CHECKIN MODAL -->
 
-<div
+<input type="datetime-local" id="checkinDateTime" required>
+<label style="font-size: 0.8rem; margin-top: -8px; margin-bottom: 12px; display: block;">Check-in Date & Time</label>
+    
+    <div
 id="checkinModal"
 class="modal">
 
@@ -377,6 +380,8 @@ lucide.createIcons();
 </script>
 
     <!-- CHECKOUT MODAL -->
+    <label>Check-out Date & Time</label>
+<input type="datetime-local" id="checkoutDateTime" required>
 <div id="checkoutModal" class="modal">
   <div class="modal-sheet">
     <div class="sheet-header">
