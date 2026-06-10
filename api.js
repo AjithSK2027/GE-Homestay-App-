@@ -5,8 +5,8 @@
 const CONFIG = {
 
   APPS_SCRIPT_URL:
-    localStorage.getItem("apps_script_url") || "",
-
+    "https://script.google.com/macros/s/AKfycbzX-6c7T9edV-6nkKY_rbx_5c_2_wHFaW3AdevQXKEcvrIMB7W5aaTZvf0pxNC_HhAuqQ/exec"
+    
   OWNER_PHONE:
     localStorage.getItem("owner_phone") || "",
 
