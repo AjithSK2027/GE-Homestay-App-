@@ -1,0 +1,8 @@
+{
+  "name": "Good Earth Homestay",
+  "short_name": "GoodEarth",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#2563eb",
+  "background_color": "#ffffff"
+}
