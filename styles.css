@@ -844,3 +844,25 @@ textarea:focus{
 .page.active {
   display: block;
 }
+
+/* Checkout extras & totals */
+.quick-extras { display: flex; flex-wrap: wrap; gap: 10px; margin: 12px 0; }
+.extra-btn { background: #f1f5f9; border: none; padding: 8px 16px; border-radius: 40px; font-size: 14px; cursor: pointer; }
+.custom-extra { display: flex; gap: 10px; margin: 12px 0; flex-wrap: wrap; }
+.extras-list { background: #f8fafc; border-radius: 16px; padding: 12px; margin: 12px 0; }
+.extra-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #e2e8f0; }
+.totals { background: #f8fafc; padding: 16px; border-radius: 20px; margin: 16px 0; }
+.totals div { display: flex; justify-content: space-between; margin: 8px 0; }
+.final-balance { font-weight: 800; font-size: 1.2rem; color: #2563eb; }
+.secondary-btn { background: #e2e8f0; border: none; padding: 12px; border-radius: 16px; cursor: pointer; }
+.checkout-summary { background: #f8fafc; padding: 16px; border-radius: 20px; margin-bottom: 16px; }
+.checkout-summary div { margin: 6px 0; }
+.room-selector { display: grid; grid-template-columns: repeat(2,1fr); gap: 12px; margin-top: 12px; }
+.room-option { padding: 16px; border-radius: 14px; border: 2px solid #e5e7eb; background: white; cursor: pointer; text-align: center; font-weight: 600; }
+.room-option.selected { background: #eff6ff; border-color: #2563eb; color: #2563eb; }
+.error-msg { color: red; text-align: center; padding: 20px; }
+.toast { position: fixed; bottom: 100px; left: 20px; right: 20px; background: #333; color: white; padding: 12px; border-radius: 30px; text-align: center; opacity: 0; transition: 0.3s; z-index: 3000; }
+.toast.show { opacity: 1; }
+.toast.success { background: #22c55e; }
+.page { display: none; }
+.page.active { display: block; }
