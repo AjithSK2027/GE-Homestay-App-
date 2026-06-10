@@ -837,3 +837,10 @@ textarea:focus{
 .checkout-summary div {
   margin: 6px 0;
 }
+
+.page {
+  display: none;
+}
+.page.active {
+  display: block;
+}
