@@ -7,9 +7,7 @@ let activeBookings = [];
 let roomInventory = [];
 let TOTAL_ROOMS = 0;
 
-// =====================================
-// Helper: Get all occupied room names from bookings
-// =====================================
+// Helper: Get occupied room names
 function getOccupiedRoomNames() {
   const occupied = [];
   if (!activeBookings) return occupied;
@@ -22,9 +20,7 @@ function getOccupiedRoomNames() {
   return occupied;
 }
 
-// =====================================
-// Helper: Find booking for a specific room
-// =====================================
+// Helper: Find booking by room name
 function findBookingByRoom(roomName) {
   if (!activeBookings) return null;
   return activeBookings.find(booking => {
@@ -34,9 +30,7 @@ function findBookingByRoom(roomName) {
   });
 }
 
-// =====================================
-// LOAD DASHBOARD (SAFE)
-// =====================================
+// Load all data
 async function loadDashboard() {
   try {
     const [rooms, bookings, stats] = await Promise.all([
@@ -50,43 +44,33 @@ async function loadDashboard() {
     activeBookings = Array.isArray(bookings) ? bookings : [];
     dashboardStats = stats || { revenue: 0, pending: 0, checkouts: 0, guests: 0 };
 
-    renderDashboard();
+    renderDashboard();  // Now defined below
   } catch(error) {
     console.error("Dashboard Load Error", error);
     showToast("Unable to load dashboard");
   }
 }
 
-// =====================================
-// RENDER ALL
-// =====================================
+// Render everything
 function renderDashboard() {
   updateHeroCard();
   updateStatsCards();
   renderRoomGrid();
 }
 
-// =====================================
-// OCCUPANCY CARD
-// =====================================
+// Update occupancy card
 function updateHeroCard() {
   const occupiedRooms = getOccupiedRoomNames().length;
   const occupancy = TOTAL_ROOMS ? Math.round((occupiedRooms / TOTAL_ROOMS) * 100) : 0;
 
   const occupancyCount = document.getElementById("occupancyCount");
-  if (occupancyCount) {
-    occupancyCount.innerText = `${occupiedRooms}/${TOTAL_ROOMS}`;
-  }
+  if (occupancyCount) occupancyCount.innerText = `${occupiedRooms}/${TOTAL_ROOMS}`;
 
   const ring = document.querySelector(".ring-value");
-  if (ring) {
-    ring.innerText = `${occupancy}%`;
-  }
+  if (ring) ring.innerText = `${occupancy}%`;
 }
 
-// =====================================
-// STATS CARDS
-// =====================================
+// Update stats cards
 function updateStatsCards() {
   const revenueEl = document.querySelector(".stat-card.revenue h3");
   if (revenueEl) revenueEl.innerText = `₹${dashboardStats.revenue || 0}`;
@@ -101,9 +85,7 @@ function updateStatsCards() {
   if (guestsEl) guestsEl.innerText = dashboardStats.guests || 0;
 }
 
-// =====================================
-// ROOM GRID
-// =====================================
+// Render room grid
 function renderRoomGrid() {
   const grid = document.getElementById("roomGrid");
   if (!grid) return;
@@ -114,14 +96,9 @@ function renderRoomGrid() {
     const card = createRoomCard(room, booking);
     grid.appendChild(card);
   });
-
-  // Attach event listeners to buttons (delegation not needed because cards are new each render)
-  attachButtonEvents();
 }
 
-// =====================================
-// CREATE SINGLE ROOM CARD
-// =====================================
+// Create one room card
 function createRoomCard(room, booking) {
   const card = document.createElement("div");
   card.className = "room-card";
@@ -143,7 +120,6 @@ function createRoomCard(room, booking) {
         <button class="checkout-btn" data-booking-id="${booking.booking_id}">Checkout</button>
       </div>
     `;
-    // Attach click handler to the card (not button) so entire card works
     card.addEventListener("click", (e) => {
       if (e.target.classList.contains("checkout-btn")) {
         e.stopPropagation();
@@ -177,7 +153,7 @@ function createRoomCard(room, booking) {
   return card;
 }
 
-// Helper to escape HTML
+// Helper: escape HTML
 function escapeHtml(str) {
   if (!str) return '';
   return str.replace(/[&<>]/g, function(m) {
@@ -188,85 +164,29 @@ function escapeHtml(str) {
   });
 }
 
-// =====================================
-// ATTACH BUTTON EVENTS (BACKUP)
-// =====================================
-function attachButtonEvents() {
-  document.querySelectorAll(".checkout-btn").forEach(btn => {
-    btn.removeEventListener("click", handleCheckoutClick);
-    btn.addEventListener("click", handleCheckoutClick);
-  });
-  document.querySelectorAll(".checkin-btn").forEach(btn => {
-    btn.removeEventListener("click", handleCheckinClick);
-    btn.addEventListener("click", handleCheckinClick);
-  });
-}
-
-function handleCheckoutClick(e) {
-  e.stopPropagation();
-  const bookingId = e.currentTarget.getAttribute("data-booking-id");
-  const booking = activeBookings.find(b => b.booking_id === bookingId);
-  if (booking && typeof openCheckoutModal === "function") {
-    openCheckoutModal(booking);
-  }
-}
-
-function handleCheckinClick(e) {
-  e.stopPropagation();
-  const roomName = e.currentTarget.getAttribute("data-room-name");
-  if (roomName && typeof openCheckinForRoom === "function") {
-    openCheckinForRoom(roomName);
-  }
-}
-
-// =====================================
-// CHECKIN SHORTCUT
-// =====================================
+// Open checkin for a specific room (used by dashboard)
 function openCheckinForRoom(roomName) {
   const modal = document.getElementById("checkinModal");
   if (modal) modal.classList.add("active");
-
-  // Use preselectRoom from checkin.js if available
   if (typeof preselectRoom === "function") {
     preselectRoom(roomName);
-  } else {
-    // Fallback: try to find and click room option after short delay
-    setTimeout(() => {
-      const roomOptions = document.querySelectorAll(".room-option");
-      for (let opt of roomOptions) {
-        const nameDiv = opt.querySelector(".room-name");
-        if (nameDiv && nameDiv.innerText.trim() === roomName) {
-          opt.click();
-          break;
-        }
-      }
-    }, 100);
   }
 }
 
-// =====================================
-// AUTO REFRESH
-// =====================================
+// Auto refresh every 30 sec
 let refreshInterval = null;
-
 function startAutoRefresh() {
   if (refreshInterval) clearInterval(refreshInterval);
-  refreshInterval = setInterval(() => {
-    loadDashboard();
-  }, 30000);
+  refreshInterval = setInterval(() => loadDashboard(), 30000);
 }
 
-// =====================================
-// INITIALIZE DASHBOARD
-// =====================================
+// Initialize
 async function initializeDashboard() {
   await loadDashboard();
   startAutoRefresh();
 }
 
-// =====================================
-// PAGE LOAD
-// =====================================
+// Start on page load
 document.addEventListener("DOMContentLoaded", () => {
   initializeDashboard();
 });
