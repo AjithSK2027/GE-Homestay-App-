@@ -304,6 +304,27 @@ function saveSettings() {
 
 }
 
+async function loadRoomsPage() {
+  const rooms = await getRooms();
+  const activeBookings = await getActiveBookings();
+  const container = document.getElementById("roomsList");
+  if(!container) return;
+  
+  container.innerHTML = "";
+  rooms.forEach(room => {
+    const isOccupied = activeBookings.some(b => b.room_type.split(',').includes(room.room_name));
+    const div = document.createElement("div");
+    div.className = "room-card";
+    div.innerHTML = `
+      <div class="room-name">${room.room_name}</div>
+      <div class="room-status ${isOccupied ? 'status-occupied' : 'status-vacant'}">
+        ${isOccupied ? 'Occupied' : 'Vacant'}
+      </div>
+    `;
+    container.appendChild(div);
+  });
+}
+
 // ======================================
 // AUTO REFRESH
 // ======================================
