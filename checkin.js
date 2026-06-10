@@ -248,13 +248,13 @@ function validateCheckin(data) {
 
   }
 
-  if(!data.room_type){
-
-    showToast(
-      "Select room"
-    );
-
-    return false;
+  if(selectedRooms.length === 0)
+{
+  showToast(
+    "Select at least one room"
+  );
+  return false;
+}
 
   }
 
