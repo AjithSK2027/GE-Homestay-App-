@@ -201,12 +201,25 @@ class="modal">
         placeholder="Guests"
         id="guestCount">
 
-        <select id="roomSelect" multiple>
-            <option>
-                Select Room
-            </option>
-        </select>
+       <div class="form-group">
 
+  <label class="form-label">
+    Select Rooms
+  </label>
+
+  <div id="roomSelector">
+
+  </div>
+
+  <div style="margin-top:10px; font-weight:600;">
+
+    Selected Rooms:
+    <span id="selectedRoomCount">0</span>
+
+  </div>
+
+</div>
+        
         <input
         type="number"
         placeholder="Nights"
