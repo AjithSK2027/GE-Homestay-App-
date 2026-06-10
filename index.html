@@ -149,6 +149,38 @@ content="width=device-width,initial-scale=1,viewport-fit=cover">
 
     </main>
 
+    <!-- ROOMS PAGE -->
+<main id="roomsPage" class="page">
+  <section class="section-title"><h3>All Rooms</h3></section>
+  <section id="roomsList" class="room-grid"></section>
+</main>
+
+<!-- REPORTS PAGE -->
+<main id="reportsPage" class="page">
+  <section class="section-title"><h3>Reports (Coming Soon)</h3></section>
+  <div style="padding: 20px; text-align: center;">Daily summary, revenue charts will appear here.</div>
+</main>
+
+<!-- SETTINGS PAGE -->
+<main id="settingsPage" class="page">
+  <section class="section-title"><h3>Settings</h3></section>
+  <div style="padding: 0 18px;">
+    <label>Apps Script URL</label>
+    <input type="text" id="settingsAppScript" placeholder="Google Apps Script URL">
+    
+    <label>UPI ID</label>
+    <input type="text" id="settingsUpi" placeholder="UPI ID">
+    
+    <label>Owner WhatsApp Number</label>
+    <input type="tel" id="settingsOwnerPhone" placeholder="+91...">
+    
+    <label>Google Place ID (for review link)</label>
+    <input type="text" id="settingsPlaceId" placeholder="Place ID">
+    
+    <button onclick="saveSettings()" class="primary-btn" style="margin-top: 20px;">Save Settings</button>
+  </div>
+</main>
+
 </div>
 
 <!-- FAB -->
