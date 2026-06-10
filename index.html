@@ -344,5 +344,69 @@ Settings
 lucide.createIcons();
 </script>
 
+    <!-- CHECKOUT MODAL -->
+<div id="checkoutModal" class="modal">
+  <div class="modal-sheet">
+    <div class="sheet-header">
+      <h3>Checkout</h3>
+      <button class="close-modal" data-close="checkoutModal"><i data-lucide="x"></i></button>
+    </div>
+
+    <div class="checkout-summary">
+      <div><strong>Guest:</strong> <span id="checkoutGuestName"></span></div>
+      <div><strong>Room:</strong> <span id="checkoutRoom"></span></div>
+      <div><strong>Guests:</strong> <span id="checkoutGuests"></span></div>
+      <div><strong>Nights:</strong> <span id="checkoutNights"></span></div>
+      <div><strong>Advance Paid:</strong> <span id="checkoutAdvance"></span></div>
+    </div>
+
+    <hr style="margin: 16px 0;">
+
+    <label>Price Per Head (₹)</label>
+    <input type="number" id="pricePerHead" placeholder="0" oninput="updatePricePerHead()">
+
+    <div class="extras-section">
+      <label>Extras</label>
+      <div class="quick-extras">
+        <button type="button" id="extraCampfire" class="extra-btn">🔥 Campfire ₹500</button>
+        <button type="button" id="extraFood" class="extra-btn">🍽️ Food ₹1000</button>
+        <button type="button" id="extraMattress" class="extra-btn">🛏️ Extra Mattress ₹300</button>
+        <button type="button" id="extraBbq" class="extra-btn">🍖 BBQ ₹1000</button>
+      </div>
+      <div class="custom-extra">
+        <input type="text" id="extraDescription" placeholder="Description">
+        <input type="number" id="extraAmount" placeholder="Amount">
+        <button type="button" onclick="addCustomExtra()" class="secondary-btn">Add Extra</button>
+      </div>
+      <div id="extrasList" class="extras-list"></div>
+    </div>
+
+    <label>Discount (%)</label>
+    <input type="number" id="discountPercent" placeholder="0" oninput="updateDiscountPercent()">
+
+    <label>Discount Amount (₹)</label>
+    <input type="number" id="discountAmount" placeholder="0" oninput="updateDiscountAmount()">
+
+    <label>Discount Reason</label>
+    <input type="text" id="discountReason" placeholder="Optional">
+
+    <label>Payment Method</label>
+    <select id="paymentMethod">
+      <option value="Cash">Cash</option>
+      <option value="UPI">UPI</option>
+      <option value="Card">Card</option>
+    </select>
+
+    <div class="totals">
+      <div>Room Total: ₹<span id="roomTotal">0</span></div>
+      <div>Extras Total: ₹<span id="extrasTotal">0</span></div>
+      <div>Subtotal: ₹<span id="subtotal">0</span></div>
+      <div>Discount: ₹<span id="discountDisplay">0</span></div>
+      <div class="final-balance">Balance Due: ₹<span id="balanceDue">0</span></div>
+    </div>
+
+    <button type="button" onclick="completeCheckoutProcess()" class="primary-btn">Complete Checkout</button>
+  </div>
+</div>
 </body>
 </html>
