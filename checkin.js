@@ -313,9 +313,7 @@ async function submitCheckin(event) {
       ).value.trim(),
 
     room_type:
-      document.getElementById(
-        "roomSelect"
-      ).value,
+  selectedRooms.join(","),
 
     guests_count:
       Number(
