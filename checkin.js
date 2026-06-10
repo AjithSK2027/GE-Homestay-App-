@@ -77,60 +77,106 @@ async function loadAvailableRooms() {
     const rooms =
       await getRooms();
 
-    const active =
-      await getActiveBookings();
+    console.log(
+      "Rooms Loaded",
+      rooms
+    );
 
-    const occupied =
-      active.map(
-        b => b.room_type
-      );
-
-    const select =
+    const container =
       document.getElementById(
-        "roomSelect"
+        "roomSelector"
       );
 
-    if(!select)
-      return;
-
-    select.innerHTML = `
-      <option value="">
-        Select Room
-      </option>
-    `;
+    container.innerHTML = "";
 
     rooms.forEach(room => {
 
-      if(
-        occupied.includes(
-          room.room_name
-        )
-      ) return;
-
-      const option =
+      const card =
         document.createElement(
-          "option"
+          "div"
         );
 
-      option.value =
-        room.room_name;
+      card.className =
+        "room-option";
 
-      option.innerText =
-        room.room_name;
+      card.innerHTML = `
 
-      select.appendChild(
-        option
+        <div class="room-name">
+          ${room.room_name}
+        </div>
+
+      `;
+
+      card.onclick = () => {
+
+        toggleRoom(
+          room.room_name,
+          card
+        );
+
+      };
+
+      container.appendChild(
+        card
       );
 
     });
 
   }
 
-  catch(error){
+  catch(error) {
 
-    console.error(error);
+    console.error(
+      "Room Loading Error",
+      error
+    );
 
   }
+
+}
+
+function toggleRoom(
+  roomName,
+  card
+) {
+
+  if(
+    selectedRooms.includes(
+      roomName
+    )
+  ) {
+
+    selectedRooms =
+      selectedRooms.filter(
+        room =>
+        room !== roomName
+      );
+
+    card.classList.remove(
+      "selected"
+    );
+
+  }
+  else {
+
+    selectedRooms.push(
+      roomName
+    );
+
+    card.classList.add(
+      "selected"
+    );
+
+  }
+
+  document.getElementById(
+    "selectedRoomCount"
+  ).innerText =
+    selectedRooms.length;
+
+  console.log(
+    selectedRooms
+  );
 
 }
 
