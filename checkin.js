@@ -2,7 +2,7 @@
 // CHECK-IN ENGINE
 // =====================================
 
-let checkinForm = null;
+let selectedRooms = [];
 
 // =====================================
 // INIT
