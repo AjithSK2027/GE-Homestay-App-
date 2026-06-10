@@ -660,3 +660,48 @@ textarea:focus{
 
   font-size:.75rem;
 }
+
+.room-selector,
+#roomSelector {
+
+  display: grid;
+
+  grid-template-columns: repeat(2,1fr);
+
+  gap: 10px;
+
+}
+
+.room-option {
+
+  padding: 14px;
+
+  border: 2px solid #e5e7eb;
+
+  border-radius: 12px;
+
+  background: white;
+
+  cursor: pointer;
+
+  transition: 0.2s;
+
+}
+
+.room-option.selected {
+
+  border-color: #2563eb;
+
+  background: #eff6ff;
+
+}
+
+.room-option.occupied {
+
+  background: #fee2e2;
+
+  border-color: #dc2626;
+
+  cursor: not-allowed;
+
+}
