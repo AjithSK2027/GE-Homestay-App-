@@ -2,392 +2,100 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta
-name="viewport"
-content="width=device-width,initial-scale=1,viewport-fit=cover">
-
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Good Earth Homestay</title>
-
 <link rel="manifest" href="manifest.json">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
 <script src="https://unpkg.com/lucide@latest"></script>
-
 <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
 <div class="app">
+  <header class="topbar">
+    <div>
+      <h1>Good Earth</h1>
+      <p id="todayDate"></p>
+    </div>
+    <button class="icon-btn"><i data-lucide="bell"></i></button>
+  </header>
 
-    <!-- HEADER -->
+  <!-- Dashboard Page -->
+  <main id="dashboardPage" class="page active">
+    <section class="hero-card">
+      <div class="hero-left">
+        <span class="hero-label">Occupancy</span>
+        <h2 id="occupancyCount">0 / 0</h2>
+        <p>Rooms Occupied</p>
+      </div>
+      <div class="hero-ring"><div class="ring-value">0%</div></div>
+    </section>
 
-    <header class="topbar">
+    <section class="stats-grid">
+      <div class="stat-card revenue"><i data-lucide="indian-rupee"></i><span>Revenue</span><h3>₹0</h3></div>
+      <div class="stat-card pending"><i data-lucide="wallet"></i><span>Pending</span><h3>₹0</h3></div>
+      <div class="stat-card checkout"><i data-lucide="door-open"></i><span>Checkouts</span><h3>0</h3></div>
+      <div class="stat-card guests"><i data-lucide="users"></i><span>Guests</span><h3>0</h3></div>
+    </section>
 
-        <div>
-            <h1>Good Earth</h1>
-            <p id="todayDate"></p>
-        </div>
+    <section class="section-title"><h3>Rooms</h3></section>
+    <section id="roomGrid" class="room-grid"></section>
+  </main>
 
-        <button class="icon-btn">
-            <i data-lucide="bell"></i>
-        </button>
-
-    </header>
-
-    <!-- DASHBOARD -->
-
-    <main id="dashboardPage">
-
-        <section class="hero-card">
-
-            <div class="hero-left">
-
-                <span class="hero-label">
-                    Occupancy
-                </span>
-
-                <h2 id="occupancyCount">
-                    0 / 8
-                </h2>
-
-                <p>
-                    Rooms Occupied
-                </p>
-
-            </div>
-
-            <div class="hero-ring">
-
-                <div class="ring-value">
-                    0%
-                </div>
-
-            </div>
-
-        </section>
-
-        <!-- STATS -->
-
-        <section class="stats-grid">
-
-            <div class="stat-card revenue">
-
-                <i data-lucide="indian-rupee"></i>
-
-                <span>
-                    Revenue
-                </span>
-
-                <h3>
-                    ₹0
-                </h3>
-
-            </div>
-
-            <div class="stat-card pending">
-
-                <i data-lucide="wallet"></i>
-
-                <span>
-                    Pending
-                </span>
-
-                <h3>
-                    ₹0
-                </h3>
-
-            </div>
-
-            <div class="stat-card checkout">
-
-                <i data-lucide="door-open"></i>
-
-                <span>
-                    Checkouts
-                </span>
-
-                <h3>
-                    0
-                </h3>
-
-            </div>
-
-            <div class="stat-card guests">
-
-                <i data-lucide="users"></i>
-
-                <span>
-                    Guests
-                </span>
-
-                <h3>
-                    0
-                </h3>
-
-            </div>
-
-        </section>
-
-        <!-- ROOM SECTION -->
-
-        <section class="section-title">
-
-            <h3>Rooms</h3>
-
-        </section>
-
-        <section
-        id="roomGrid"
-        class="room-grid">
-
-        </section>
-
-    </main>
-
-    <!-- ROOMS PAGE -->
-<main id="roomsPage" class="page">
-  <section class="section-title"><h3>All Rooms</h3></section>
-  <section id="roomsList" class="room-grid"></section>
-</main>
-
-<!-- REPORTS PAGE -->
-<main id="reportsPage" class="page">
-  <section class="section-title"><h3>Reports (Coming Soon)</h3></section>
-  <div style="padding: 20px; text-align: center;">Daily summary, revenue charts will appear here.</div>
-</main>
-
-<!-- SETTINGS PAGE -->
-<main id="settingsPage" class="page">
-  <section class="section-title"><h3>Settings</h3></section>
-  <div style="padding: 0 18px;">
-    <label>Apps Script URL</label>
-    <input type="text" id="settingsAppScript" placeholder="Google Apps Script URL">
-    
-    <label>UPI ID</label>
-    <input type="text" id="settingsUpi" placeholder="UPI ID">
-    
-    <label>Owner WhatsApp Number</label>
-    <input type="tel" id="settingsOwnerPhone" placeholder="+91...">
-    
-    <label>Google Place ID (for review link)</label>
-    <input type="text" id="settingsPlaceId" placeholder="Place ID">
-    
-    <button onclick="saveSettings()" class="primary-btn" style="margin-top: 20px;">Save Settings</button>
-  </div>
-</main>
-
+  <!-- Rooms Page (Placeholder) -->
+  <main id="roomsPage" class="page"><div style="padding:20px">Rooms list coming soon</div></main>
+  <!-- Reports Page -->
+  <main id="reportsPage" class="page"><div style="padding:20px">Reports coming soon</div></main>
+  <!-- Settings Page -->
+  <main id="settingsPage" class="page">
+    <div style="padding:18px">
+      <label>Apps Script URL</label><input type="text" id="settingsAppScript" placeholder="URL">
+      <label>UPI ID</label><input type="text" id="settingsUpi" placeholder="UPI">
+      <label>Owner WhatsApp</label><input type="tel" id="settingsOwnerPhone" placeholder="+91...">
+      <label>Google Place ID</label><input type="text" id="settingsPlaceId" placeholder="Place ID">
+      <button onclick="saveSettings()" class="primary-btn" style="margin-top:20px">Save</button>
+    </div>
+  </main>
 </div>
 
 <!-- FAB -->
+<button id="fab" class="fab"><i data-lucide="plus"></i></button>
 
-<button
-id="fab"
-class="fab">
-
-<i data-lucide="plus"></i>
-
-</button>
-
-<!-- CHECKIN MODAL -->
-
-<input type="datetime-local" id="checkinDateTime" required>
-<label style="font-size: 0.8rem; margin-top: -8px; margin-bottom: 12px; display: block;">Check-in Date & Time</label>
-    
-    <div
-id="checkinModal"
-class="modal">
-
-<div class="modal-sheet">
-
-    <div class="sheet-header">
-
-        <h3>
-            New Check-In
-        </h3>
-
-        <button
-        class="close-modal">
-
-            <i data-lucide="x"></i>
-
-        </button>
-
-    </div>
-
+<!-- ========== CHECK-IN MODAL ========== -->
+<div id="checkinModal" class="modal">
+  <div class="modal-sheet">
+    <div class="sheet-header"><h3>New Check-In</h3><button class="close-modal" data-close="checkinModal"><i data-lucide="x"></i></button></div>
     <form id="checkinForm">
+      <input type="text" id="guestName" placeholder="Guest Name" required>
+      <input type="tel" id="phoneNumber" placeholder="Phone Number" required>
+      <input type="number" id="guestCount" placeholder="Number of Guests" required>
+      
+      <div class="form-group">
+        <label class="form-label">Select Rooms</label>
+        <div id="roomSelector" class="room-selector"></div>
+        <div style="margin-top:10px; font-weight:600;">Selected Rooms: <span id="selectedRoomCount">0</span></div>
+      </div>
 
-        <input
-        type="text"
-        placeholder="Guest Name"
-        id="guestName">
-
-        <input
-        type="tel"
-        placeholder="Phone Number"
-        id="phoneNumber">
-
-        <input
-        type="number"
-        placeholder="Guests"
-        id="guestCount">
-
-       <div class="form-group">
-
-  <label class="form-label">
-    Select Rooms
-  </label>
-
-  <div id="roomSelector">
-
-  </div>
-
-  <div style="margin-top:10px; font-weight:600;">
-
-    Selected Rooms:
-    <span id="selectedRoomCount">0</span>
-
-  </div>
-
-</div>
-        
-        <input
-        type="number"
-        placeholder="Nights"
-        id="nights">
-
-        <select id="mealPlan">
-
-            <option value="EP">
-                EP
-            </option>
-
-            <option value="CP">
-                CP
-            </option>
-
-            <option value="MAP">
-                MAP
-            </option>
-
-            <option value="AP">
-                AP
-            </option>
-
-        </select>
-
-        <input
-        type="number"
-        placeholder="Advance Paid"
-        id="advancePaid">
-
-        <select id="paymentMode">
-
-            <option value="">
-                Payment Mode
-            </option>
-
-            <option value="UPI">
-                UPI
-            </option>
-
-            <option value="Cash">
-                Cash
-            </option>
-
-            <option value="Card">
-                Card
-            </option>
-
-        </select>
-
-        <textarea
-        id="notes"
-        placeholder="Notes"></textarea>
-
-        <button
-        type="submit"
-        class="primary-btn">
-
-            Check In
-
-        </button>
-
+      <input type="number" id="nights" placeholder="Nights" required>
+      <input type="datetime-local" id="checkinDateTime" required>
+      
+      <select id="mealPlan">
+        <option value="EP">EP</option><option value="CP">CP</option><option value="MAP">MAP</option><option value="AP">AP</option>
+      </select>
+      <input type="number" id="advancePaid" placeholder="Advance Paid (₹)">
+      <select id="paymentMode">
+        <option value="">Payment Mode</option><option value="UPI">UPI</option><option value="Cash">Cash</option><option value="Card">Card</option>
+      </select>
+      <textarea id="notes" placeholder="Notes"></textarea>
+      <button type="submit" class="primary-btn">Check In</button>
     </form>
-
+  </div>
 </div>
 
-</div>
-
-<!-- BOTTOM NAV -->
-
-<nav class="bottom-nav">
-
-<button class="nav-item active">
-
-<i data-lucide="hotel"></i>
-
-<span>
-Dashboard
-</span>
-
-</button>
-
-<button class="nav-item">
-
-<i data-lucide="bed-double"></i>
-
-<span>
-Rooms
-</span>
-
-</button>
-
-<button class="nav-item">
-
-<i data-lucide="bar-chart-3"></i>
-
-<span>
-Reports
-</span>
-
-</button>
-
-<button class="nav-item">
-
-<i data-lucide="settings"></i>
-
-<span>
-Settings
-</span>
-
-</button>
-
-</nav>
-
-<script src="api.js"></script>
-<script src="dashboard.js"></script>
-<script src="checkin.js"></script>
-<script src="checkout.js"></script>
-<script src="app.js"></script>
-
-<script>
-lucide.createIcons();
-</script>
-
-    <!-- CHECKOUT MODAL -->
-    <label>Check-out Date & Time</label>
-<input type="datetime-local" id="checkoutDateTime" required>
+<!-- ========== CHECK-OUT MODAL ========== -->
 <div id="checkoutModal" class="modal">
   <div class="modal-sheet">
-    <div class="sheet-header">
-      <h3>Checkout</h3>
-      <button class="close-modal" data-close="checkoutModal"><i data-lucide="x"></i></button>
-    </div>
+    <div class="sheet-header"><h3>Checkout</h3><button class="close-modal" data-close="checkoutModal"><i data-lucide="x"></i></button></div>
 
     <div class="checkout-summary">
       <div><strong>Guest:</strong> <span id="checkoutGuestName"></span></div>
@@ -397,10 +105,11 @@ lucide.createIcons();
       <div><strong>Advance Paid:</strong> <span id="checkoutAdvance"></span></div>
     </div>
 
-    <hr style="margin: 16px 0;">
+    <label>Check-out Date & Time</label>
+    <input type="datetime-local" id="checkoutDateTime" required>
 
     <label>Price Per Head (₹)</label>
-    <input type="number" id="pricePerHead" placeholder="0" oninput="updatePricePerHead()">
+    <input type="number" id="pricePerHead" oninput="updatePricePerHead()">
 
     <div class="extras-section">
       <label>Extras</label>
@@ -419,20 +128,13 @@ lucide.createIcons();
     </div>
 
     <label>Discount (%)</label>
-    <input type="number" id="discountPercent" placeholder="0" oninput="updateDiscountPercent()">
-
+    <input type="number" id="discountPercent" oninput="updateDiscountPercent()">
     <label>Discount Amount (₹)</label>
-    <input type="number" id="discountAmount" placeholder="0" oninput="updateDiscountAmount()">
-
+    <input type="number" id="discountAmount" oninput="updateDiscountAmount()">
     <label>Discount Reason</label>
     <input type="text" id="discountReason" placeholder="Optional">
-
     <label>Payment Method</label>
-    <select id="paymentMethod">
-      <option value="Cash">Cash</option>
-      <option value="UPI">UPI</option>
-      <option value="Card">Card</option>
-    </select>
+    <select id="paymentMethod"><option value="Cash">Cash</option><option value="UPI">UPI</option><option value="Card">Card</option></select>
 
     <div class="totals">
       <div>Room Total: ₹<span id="roomTotal">0</span></div>
@@ -445,5 +147,20 @@ lucide.createIcons();
     <button type="button" onclick="completeCheckoutProcess()" class="primary-btn">Complete Checkout</button>
   </div>
 </div>
+
+<!-- Bottom Navigation -->
+<nav class="bottom-nav">
+  <button class="nav-item active" data-page="dashboardPage"><i data-lucide="hotel"></i><span>Dashboard</span></button>
+  <button class="nav-item" data-page="roomsPage"><i data-lucide="bed-double"></i><span>Rooms</span></button>
+  <button class="nav-item" data-page="reportsPage"><i data-lucide="bar-chart-3"></i><span>Reports</span></button>
+  <button class="nav-item" data-page="settingsPage"><i data-lucide="settings"></i><span>Settings</span></button>
+</nav>
+
+<script src="api.js"></script>
+<script src="dashboard.js"></script>
+<script src="checkin.js"></script>
+<script src="checkout.js"></script>
+<script src="app.js"></script>
+<script>lucide.createIcons();</script>
 </body>
 </html>
