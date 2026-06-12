@@ -3,7 +3,7 @@
 // =====================================
 
 const CONFIG = {
-  APPS_SCRIPT_URL: localStorage.getItem("apps_script_url") || "",
+  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxkKkg6isfj4Y1ru1ofSxPy0BFZ9eTBW4x_WIiAXG6VMM1JmRbg41pqB6G54VI2cbg9w/exec",
   OWNER_PHONE: localStorage.getItem("owner_phone") || "",
   UPI_ID: localStorage.getItem("upi_id") || "",
   PLACE_ID: localStorage.getItem("place_id") || ""
@@ -21,7 +21,7 @@ async function apiGet(action) {
     const response = await fetch(`${CONFIG.APPS_SCRIPT_URL}?action=${action}`);
     if (!response.ok) throw new Error(`GET ${action} failed`);
     return await response.json();
-  } catch(error) {
+  } catch (error) {
     console.error(error);
     showToast("Connection failed");
     return null;
@@ -36,7 +36,7 @@ async function apiPost(payload) {
     });
     const text = await response.text();
     return JSON.parse(text);
-  } catch(error) {
+  } catch (error) {
     console.error("POST ERROR", error);
     showToast("Save failed");
     return null;
@@ -107,18 +107,18 @@ function generateBookingId() {
 }
 
 function sendWhatsApp(phone, message) {
-  const clean = phone.replace(/\D/g,'');
+  const clean = phone.replace(/\D/g, '');
   window.open(`https://wa.me/${clean}?text=${encodeURIComponent(message)}`, "_blank");
 }
 
 function getReviewLink() {
-  if(!CONFIG.PLACE_ID) return "#";
+  if (!CONFIG.PLACE_ID) return "#";
   return `https://search.google.com/local/writereview?placeid=${CONFIG.PLACE_ID}`;
 }
 
 function showToast(message) {
   let toast = document.querySelector(".toast");
-  if(!toast){
+  if (!toast) {
     toast = document.createElement("div");
     toast.className = "toast";
     document.body.appendChild(toast);
