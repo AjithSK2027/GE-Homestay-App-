@@ -8,6 +8,41 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://unpkg.com/lucide@latest"></script>
 <link rel="stylesheet" href="styles.css">
+<style>
+  /* Collapsible sections – add to existing styles.css or keep here */
+  .form-section {
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    margin-bottom: 18px;
+    background: white;
+    overflow: hidden;
+  }
+  .form-section-header {
+    background: #f8fafc;
+    padding: 14px 16px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+  }
+  .form-section-header::after {
+    content: "▼";
+    font-size: 12px;
+    transition: transform 0.2s ease;
+  }
+  .form-section.collapsed .form-section-header::after {
+    transform: rotate(-90deg);
+  }
+  .form-section-content {
+    padding: 0 16px 16px 16px;
+    transition: all 0.2s;
+  }
+  .form-section.collapsed .form-section-content {
+    display: none;
+  }
+</style>
 </head>
 <body>
 
@@ -47,53 +82,76 @@
 
 <button id="fab" class="fab"><i data-lucide="plus"></i></button>
 
-<!-- CHECK-IN MODAL -->
+<!-- ========== CHECK-IN MODAL (WITH COLLAPSIBLE SECTIONS) ========== -->
 <div id="checkinModal" class="modal">
   <div class="modal-sheet">
     <div class="sheet-header"><h3>New Check-In</h3><button class="close-modal" data-close="checkinModal"><i data-lucide="x"></i></button></div>
     <form id="checkinForm">
-      <input type="text" id="guestName" placeholder="Primary Guest Name" required>
-      <input type="tel" id="phoneNumber" placeholder="Primary Phone Number" required>
-      <input type="email" id="emailId" placeholder="Email (optional)">
-      <input type="text" id="aadhaarNumber" placeholder="Aadhaar Number (optional)">
 
-      <div class="form-group">
-        <label>All Guests Details</label>
-        <div id="guestsContainer">
-          <div class="guest-entry">
-            <input type="text" class="guest-name" placeholder="Full Name *" required>
-            <input type="text" class="guest-aadhaar" placeholder="Aadhaar Number">
-            <input type="email" class="guest-email" placeholder="Email">
-            <input type="tel" class="guest-phone" placeholder="Phone Number">
-          </div>
+      <!-- SECTION 1: PRIMARY GUEST -->
+      <div class="form-section">
+        <div class="form-section-header">1. Primary Guest</div>
+        <div class="form-section-content">
+          <input type="text" id="guestName" placeholder="Primary Guest Name" required>
+          <input type="tel" id="phoneNumber" placeholder="Primary Phone Number" required>
+          <input type="email" id="emailId" placeholder="Email (optional)">
+          <input type="text" id="aadhaarNumber" placeholder="Aadhaar Number (optional)">
         </div>
-        <button type="button" onclick="addGuestEntry()" class="secondary-btn" style="margin:10px 0;">+ Add Another Guest</button>
       </div>
 
-      <div class="form-group">
-        <label>Select Rooms</label>
-        <div id="roomSelector" class="room-selector"></div>
-        <div style="margin-top:10px; font-weight:600;">Selected Rooms: <span id="selectedRoomCount">0</span></div>
+      <!-- SECTION 2: ADDITIONAL GUESTS (collapsed by default) -->
+      <div class="form-section collapsed">
+        <div class="form-section-header">2. Additional Guests (optional)</div>
+        <div class="form-section-content">
+          <div id="guestsContainer">
+            <div class="guest-entry">
+              <input type="text" class="guest-name" placeholder="Full Name *" required>
+              <input type="text" class="guest-aadhaar" placeholder="Aadhaar Number">
+              <input type="email" class="guest-email" placeholder="Email">
+              <input type="tel" class="guest-phone" placeholder="Phone Number">
+            </div>
+          </div>
+          <button type="button" onclick="addGuestEntry()" class="secondary-btn" style="margin:10px 0;">+ Add Another Guest</button>
+        </div>
       </div>
 
-      <input type="number" id="guestCount" placeholder="Total PAX" required>
-      <input type="number" id="nights" placeholder="Nights" required>
-      <input type="datetime-local" id="checkinDateTime" required>
-      <select id="mealPlan">
-        <option value="EP">EP</option><option value="CP">CP</option><option value="MAP">MAP</option><option value="AP">AP</option>
-      </select>
-      <input type="number" id="advancePaid" placeholder="Advance Paid (₹)">
-      <select id="paymentMode">
-        <option value="">Payment Mode</option><option value="UPI">UPI</option><option value="Cash">Cash</option><option value="Card">Card</option>
-      </select>
-      <input type="text" id="advanceReceivedBy" placeholder="Staff who received advance" required>
-      <textarea id="notes" placeholder="Notes"></textarea>
+      <!-- SECTION 3: ROOMS & BOOKING DETAILS -->
+      <div class="form-section">
+        <div class="form-section-header">3. Rooms & Booking</div>
+        <div class="form-section-content">
+          <div class="form-group">
+            <label>Select Rooms</label>
+            <div id="roomSelector" class="room-selector"></div>
+            <div style="margin-top:10px; font-weight:600;">Selected Rooms: <span id="selectedRoomCount">0</span></div>
+          </div>
+          <input type="number" id="guestCount" placeholder="Total PAX (number of guests)" required>
+          <input type="number" id="nights" placeholder="Nights" required>
+          <input type="datetime-local" id="checkinDateTime" required>
+          <select id="mealPlan">
+            <option value="EP">EP</option><option value="CP">CP</option><option value="MAP">MAP</option><option value="AP">AP</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- SECTION 4: PAYMENT & NOTES -->
+      <div class="form-section">
+        <div class="form-section-header">4. Payment & Notes</div>
+        <div class="form-section-content">
+          <input type="number" id="advancePaid" placeholder="Advance Paid (₹)">
+          <select id="paymentMode">
+            <option value="">Payment Mode</option><option value="UPI">UPI</option><option value="Cash">Cash</option><option value="Card">Card</option>
+          </select>
+          <input type="text" id="advanceReceivedBy" placeholder="Staff who received advance" required>
+          <textarea id="notes" placeholder="Notes (optional)"></textarea>
+        </div>
+      </div>
+
       <button type="submit" class="primary-btn">Check In</button>
     </form>
   </div>
 </div>
 
-<!-- CHECK-OUT MODAL -->
+<!-- ========== CHECK-OUT MODAL (unchanged) ========== -->
 <div id="checkoutModal" class="modal">
   <div class="modal-sheet">
     <div class="sheet-header"><h3>Checkout</h3><button class="close-modal" data-close="checkoutModal"><i data-lucide="x"></i></button></div>
@@ -158,6 +216,16 @@
 <script src="checkin.js"></script>
 <script src="checkout.js"></script>
 <script src="app.js"></script>
-<script>lucide.createIcons();</script>
+<script>
+  lucide.createIcons();
+
+  // Toggle collapsible sections
+  document.querySelectorAll('.form-section-header').forEach(header => {
+    header.addEventListener('click', () => {
+      const section = header.closest('.form-section');
+      section.classList.toggle('collapsed');
+    });
+  });
+</script>
 </body>
 </html>
