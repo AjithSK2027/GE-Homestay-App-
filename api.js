@@ -3,7 +3,7 @@
 // =====================================
 
 const CONFIG = {
-  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbwNQ2BNR1CEch_-azDIkym_18ONKz5SK1Lb9hHmRTLf1O0btscEup_G0z0Zpd-0kowLVQ/exec",
+  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbzxQD5SWmsqL3mwHeWthf4W9orK2TVxYPsLfKQ44AcTT0CwXXKZFhqPHj95ICk9s4TJEQ/exec",
   OWNER_PHONE: localStorage.getItem("owner_phone") || "",
   UPI_ID: localStorage.getItem("upi_id") || "",
   PLACE_ID: localStorage.getItem("place_id") || ""
