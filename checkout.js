@@ -1,5 +1,5 @@
 // =====================================
-// CHECKOUT ENGINE (WITH DATETIME)
+// CHECKOUT ENGINE (FINAL)
 // =====================================
 
 let currentBooking = null;
@@ -29,15 +29,12 @@ function populateCheckout() {
   document.getElementById("checkoutGuests").innerText = currentBooking.guests_count;
   document.getElementById("checkoutNights").innerText = currentBooking.nights;
   document.getElementById("checkoutAdvance").innerText = `₹${checkoutState.advancePaid}`;
-
-  // Default check-out datetime: tomorrow same time
   const now = new Date();
   now.setDate(now.getDate() + 1);
   now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
   const defaultDateTime = now.toISOString().slice(0, 16);
   const dtInput = document.getElementById("checkoutDateTime");
   if (dtInput && !dtInput.value) dtInput.value = defaultDateTime;
-
   updateCheckoutSummary();
 }
 
@@ -109,7 +106,9 @@ function updateCheckoutSummary() {
 
 async function completeCheckoutProcess() {
   const checkoutDateTime = document.getElementById("checkoutDateTime").value;
+  const receivedBy = document.getElementById("receivedByCheckout").value;
   if (!checkoutDateTime) { showToast("Select check-out date & time"); return; }
+  if (!receivedBy) { showToast("Enter staff name who received payment"); return; }
 
   const payload = {
     booking_id: currentBooking.booking_id,
@@ -126,13 +125,12 @@ async function completeCheckoutProcess() {
     discount_amount: checkoutState.discountAmount,
     discount_reason: document.getElementById("discountReason").value,
     payment_received: checkoutState.finalBalance,
-    payment_method: document.getElementById("paymentMethod").value,
+    payment_method: document.getElementById("paymentMethodCheckout").value,
     advance_paid: checkoutState.advancePaid,
-    balance_due: 0,
+    received_by: receivedBy,
     note: currentBooking.note,
     check_out_date: checkoutDateTime
   };
-
   const result = await completeCheckout(payload);
   if (result) {
     showSuccessToast("Checkout Complete");
