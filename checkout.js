@@ -144,6 +144,36 @@ function closeCheckoutModal() {
   if (modal) modal.classList.remove("active");
 }
 
+function sendOwnerCheckoutMessage(booking, payload) {
+  if (!CONFIG.OWNER_PHONE) return;
+  
+  const msg = 
+`🏡 GOOD EARTH HOMESTAY
+
+✅ Check-Out Completed
+
+Guest: ${booking.guest_name}
+Phone: ${booking.phone_number}
+Rooms: ${booking.room_type}
+PAX: ${booking.guests_count}
+Nights: ${booking.nights}
+Check-out: ${payload.check_out_date}
+
+💰 Billing:
+Price per Head: ₹${payload.price_per_head}
+Room Total: ₹${payload.room_total}
+Extras: ${payload.extra_desc || "None"} (₹${payload.extra_amount || 0})
+Discount: ₹${payload.discount_amount || 0} (${payload.discount_percent || 0}%)
+Advance Paid: ₹${payload.advance_paid}
+Final Amount Received: ₹${payload.payment_received}
+Payment Mode: ${payload.payment_method}
+Received By: ${payload.received_by}
+
+📝 Notes: ${payload.note || "None"}`;
+
+  sendWhatsApp(CONFIG.OWNER_PHONE, msg);
+}
+
 function setupQuickExtras() {
   const add = (id, desc, amt) => document.getElementById(id)?.addEventListener("click", () => addExtra(desc, amt));
   add("extraCampfire", "Campfire", 500);
