@@ -1,5 +1,5 @@
 // =====================================
-// CHECK-IN ENGINE (FINAL)
+// CHECK-IN ENGINE (FINAL WITH WHATSAPP)
 // =====================================
 
 let selectedRooms = [];
@@ -201,6 +201,7 @@ function resetCheckinForm() {
   }
 }
 
+// ===== WHATSAPP CHECK-IN MESSAGE (UPDATED) =====
 function sendOwnerCheckinMessage(booking, guestsList) {
   if (!CONFIG.OWNER_PHONE) return;
   
