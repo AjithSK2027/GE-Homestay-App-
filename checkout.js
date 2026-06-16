@@ -131,8 +131,10 @@ async function completeCheckoutProcess() {
     note: currentBooking.note,
     check_out_date: checkoutDateTime
   };
+
   const result = await completeCheckout(payload);
   if (result) {
+    sendOwnerCheckoutMessage(currentBooking, payload); // 👈 NEW LINE
     showSuccessToast("Checkout Complete");
     closeCheckoutModal();
     if (typeof loadDashboard === "function") await loadDashboard();
