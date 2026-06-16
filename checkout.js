@@ -1,5 +1,5 @@
 // =====================================
-// CHECKOUT ENGINE (FINAL)
+// CHECKOUT ENGINE (FINAL WITH WHATSAPP)
 // =====================================
 
 let currentBooking = null;
@@ -62,7 +62,7 @@ function renderExtras() {
   const container = document.getElementById("extrasList");
   if (!container) return;
   container.innerHTML = "";
-  checkoutExtras.forEach((extra, idx) => {
+  checkoutExtras.forEach((extra) => {
     const div = document.createElement("div");
     div.className = "extra-row";
     div.innerHTML = `<span>${escapeHtml(extra.desc)}</span><span>₹${extra.amount}</span>`;
@@ -134,7 +134,7 @@ async function completeCheckoutProcess() {
 
   const result = await completeCheckout(payload);
   if (result) {
-    sendOwnerCheckoutMessage(currentBooking, payload); // 👈 NEW LINE
+    sendOwnerCheckoutMessage(currentBooking, payload);
     showSuccessToast("Checkout Complete");
     closeCheckoutModal();
     if (typeof loadDashboard === "function") await loadDashboard();
@@ -146,6 +146,7 @@ function closeCheckoutModal() {
   if (modal) modal.classList.remove("active");
 }
 
+// ===== WHATSAPP CHECKOUT MESSAGE =====
 function sendOwnerCheckoutMessage(booking, payload) {
   if (!CONFIG.OWNER_PHONE) return;
   
