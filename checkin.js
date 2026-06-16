@@ -203,8 +203,29 @@ function resetCheckinForm() {
 
 function sendOwnerCheckinMessage(booking, guestsList) {
   if (!CONFIG.OWNER_PHONE) return;
+  
   let guestSummary = guestsList.map(g => `${g.name} (${g.phone})`).join("\n");
-  const msg = `🏡 GOOD EARTH HOMESTAY\n\nNew Check-In\nPrimary: ${booking.guest_name}\nRooms: ${booking.room_type}\nPAX: ${booking.guests_count}\nNights: ${booking.nights}\nAdvance: ₹${booking.advance_paid}\nMeal: ${booking.meal_plan}\nCheck-in: ${booking.check_in_date}\n\nGuests:\n${guestSummary}`;
+  const msg = 
+`🏡 GOOD EARTH HOMESTAY
+
+✅ New Check-In
+
+Guest: ${booking.guest_name}
+Phone: ${booking.phone_number}
+Rooms: ${booking.room_type}
+PAX: ${booking.guests_count}
+Nights: ${booking.nights}
+Meal Plan: ${booking.meal_plan}
+Advance Paid: ₹${booking.advance_paid}
+Payment Mode: ${booking.advance_payment_mode}
+Received By: ${booking.advance_received_by}
+Check-in: ${booking.check_in_date}
+
+Guests:
+${guestSummary}
+
+📝 Notes: ${booking.note || "None"}`;
+
   sendWhatsApp(CONFIG.OWNER_PHONE, msg);
 }
 
