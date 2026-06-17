@@ -92,10 +92,10 @@
       <div class="form-section">
         <div class="form-section-header">1. Primary Guest</div>
         <div class="form-section-content">
-          <input type="text" id="guestName" placeholder="Primary Guest Name" required>
-          <input type="tel" id="phoneNumber" placeholder="Primary Phone Number" required>
-          <input type="email" id="emailId" placeholder="Email (optional)">
-          <input type="text" id="aadhaarNumber" placeholder="Aadhaar Number (optional)">
+          <input type="text" id="guestName" placeholder="Primary Guest Name">
+          <input type="tel" id="phoneNumber" placeholder="Primary Phone Number">
+          <input type="email" id="emailId" placeholder="Email">
+          <input type="text" id="aadhaarNumber" placeholder="Aadhaar Number">
         </div>
       </div>
 
@@ -105,7 +105,7 @@
         <div class="form-section-content">
           <div id="guestsContainer">
             <div class="guest-entry">
-              <input type="text" class="guest-name" placeholder="Full Name *" required>
+              <input type="text" class="guest-name" placeholder="Full Name *">
               <input type="text" class="guest-aadhaar" placeholder="Aadhaar Number">
               <input type="email" class="guest-email" placeholder="Email">
               <input type="tel" class="guest-phone" placeholder="Phone Number">
@@ -124,9 +124,9 @@
             <div id="roomSelector" class="room-selector"></div>
             <div style="margin-top:10px; font-weight:600;">Selected Rooms: <span id="selectedRoomCount">0</span></div>
           </div>
-          <input type="number" id="guestCount" placeholder="Total PAX (number of guests)" required>
-          <input type="number" id="nights" placeholder="Nights" required>
-          <input type="datetime-local" id="checkinDateTime" required>
+          <input type="number" id="guestCount" placeholder="Total PAX (number of guests)">
+          <input type="number" id="nights" placeholder="Nights">
+          <input type="datetime-local" id="checkinDateTime">
           <select id="mealPlan">
             <option value="EP">EP</option><option value="CP">CP</option><option value="MAP">MAP</option><option value="AP">AP</option>
           </select>
@@ -141,7 +141,7 @@
           <select id="paymentMode">
             <option value="">Payment Mode</option><option value="UPI">UPI</option><option value="Cash">Cash</option><option value="Card">Card</option>
           </select>
-          <input type="text" id="advanceReceivedBy" placeholder="Staff who received advance" required>
+          <input type="text" id="advanceReceivedBy" placeholder="Staff who received advance">
           <textarea id="notes" placeholder="Notes (optional)"></textarea>
         </div>
       </div>
@@ -192,7 +192,7 @@
       <option value="Cash">Cash</option><option value="UPI">UPI</option><option value="Card">Card</option>
     </select>
     <label>Received By (Staff)</label>
-    <input type="text" id="receivedByCheckout" required>
+    <input type="text" id="receivedByCheckout">
     <div class="totals">
       <div>Room Total: ₹<span id="roomTotal">0</span></div>
       <div>Extras Total: ₹<span id="extrasTotal">0</span></div>
