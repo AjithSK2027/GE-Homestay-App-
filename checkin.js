@@ -125,12 +125,15 @@ function closeModal(modalId) {
 }
 
 function validateCheckin(data) {
-  if (!data.guest_name) { showToast("Primary guest name is required"); return false; }
-  if (selectedRooms.length === 0) { showToast("Select at least one room"); return false; }
-  if (!data.guests_count || data.guests_count < 1) { showToast("Enter total PAX"); return false; }
-  if (!data.nights || data.nights < 1) { showToast("Enter nights"); return false; }
-  if (!data.check_in_date) { showToast("Select check-in date & time"); return false; }
-  if (!data.advance_received_by) { showToast("Enter staff name who received advance"); return false; }
+  // Only require guest name and at least one room
+  if (!data.guest_name) {
+    showToast("Guest name is required");
+    return false;
+  }
+  if (selectedRooms.length === 0) {
+    showToast("Select at least one room");
+    return false;
+  }
   return true;
 }
 
