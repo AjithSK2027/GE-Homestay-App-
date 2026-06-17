@@ -1,5 +1,5 @@
 // =====================================
-// CHECK-IN ENGINE (FINAL – no required fields)
+// CHECK-IN ENGINE (NO MANDATORY FIELDS)
 // =====================================
 
 let selectedRooms = [];
@@ -123,17 +123,9 @@ function closeModal(modalId) {
   if (modal) modal.classList.remove("active");
 }
 
+// ===== NO VALIDATION – submit even if empty =====
 function validateCheckin(data) {
-  // Only require guest name and at least one room
-  if (!data.guest_name) {
-    showToast("Guest name is required");
-    return false;
-  }
-  if (selectedRooms.length === 0) {
-    showToast("Select at least one room");
-    return false;
-  }
-  return true;
+  return true; // always passes
 }
 
 async function submitCheckin(event) {
@@ -143,20 +135,20 @@ async function submitCheckin(event) {
   submitBtn.disabled = true;
   submitBtn.innerText = "Checking In...";
 
+  // Collect additional guests (optional)
   const allGuests = collectAllGuests();
-  if (allGuests.length === 0) {
-    showToast("At least one guest is required");
-    submitBtn.disabled = false;
-    submitBtn.innerText = "Check In";
-    return;
-  }
-  const primaryGuest = allGuests[0];
+
+  // Primary guest comes from the separate fields (not from the list)
+  const primaryGuestName = document.getElementById("guestName")?.value || "";
+  const primaryPhone = document.getElementById("phoneNumber")?.value || "";
+  const primaryEmail = document.getElementById("emailId")?.value || "";
+  const primaryAadhaar = document.getElementById("aadhaarNumber")?.value || "";
 
   const payload = {
-    guest_name: primaryGuest.name,
-    phone_number: primaryGuest.phone,
-    email_id: document.getElementById("emailId")?.value || "",
-    aadhaar_number: document.getElementById("aadhaarNumber")?.value || "",
+    guest_name: primaryGuestName,
+    phone_number: primaryPhone,
+    email_id: primaryEmail,
+    aadhaar_number: primaryAadhaar,
     guests_json: JSON.stringify(allGuests),
     room_type: selectedRooms.join(","),
     guests_count: Number(document.getElementById("guestCount")?.value || 0),
@@ -169,16 +161,16 @@ async function submitCheckin(event) {
     note: document.getElementById("notes")?.value || ""
   };
 
-  if (!validateCheckin(payload)) {
-    submitBtn.disabled = false;
-    submitBtn.innerText = "Check In";
-    return;
-  }
+  // No validation – we skip it
+  // if (!validateCheckin(payload)) { ... } // removed
 
   try {
     const result = await createCheckin(payload);
     if (result && result.success !== false) {
-      sendOwnerCheckinMessage(payload, allGuests);
+      // Only send WhatsApp if there is a guest name (optional)
+      if (primaryGuestName) {
+        sendOwnerCheckinMessage(payload, allGuests);
+      }
       resetCheckinForm();
       closeModal("checkinModal");
       if (typeof loadDashboard === "function") await loadDashboard();
@@ -215,10 +207,11 @@ function resetCheckinForm() {
   }
 }
 
-// WhatsApp Check‑in Message
+// WhatsApp Check‑in Message (only if primary guest exists)
 function sendOwnerCheckinMessage(booking, guestsList) {
   if (!CONFIG.OWNER_PHONE) return;
-  let guestSummary = guestsList.map(g => `${g.name} (${g.phone})`).join("\n");
+  if (!booking.guest_name) return; // skip if no primary guest
+  let guestSummary = guestsList.map(g => `${g.name} (${g.phone})`).join("\n") || "None";
   const msg =
 `🏡 GOOD EARTH HOMESTAY
 
@@ -226,7 +219,7 @@ function sendOwnerCheckinMessage(booking, guestsList) {
 
 Guest: ${booking.guest_name}
 Phone: ${booking.phone_number}
-Rooms: ${booking.room_type}
+Rooms: ${booking.room_type || "Not selected"}
 PAX: ${booking.guests_count}
 Nights: ${booking.nights}
 Meal Plan: ${booking.meal_plan}
