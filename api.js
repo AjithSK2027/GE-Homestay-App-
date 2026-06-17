@@ -106,9 +106,28 @@ function generateBookingId() {
   return `GE-${yyyy}${mm}${dd}-${rand}`;
 }
 
+// =====================================
+// FIXED WHATSAPP – works on mobile & desktop
+// =====================================
 function sendWhatsApp(phone, message) {
+  if (!phone) {
+    console.warn("No phone number provided for WhatsApp");
+    return;
+  }
   const clean = phone.replace(/\D/g, '');
-  window.open(`https://wa.me/${clean}?text=${encodeURIComponent(message)}`, "_blank");
+  const url = `https://wa.me/${clean}?text=${encodeURIComponent(message)}`;
+  
+  // Try window.open first (works on desktop)
+  try {
+    const win = window.open(url, '_blank');
+    // If window.open is blocked or returns null, fallback to location.href
+    if (!win || win.closed || typeof win.closed === 'undefined') {
+      window.location.href = url;
+    }
+  } catch (e) {
+    // On mobile, window.open is often blocked; fallback to direct navigation
+    window.location.href = url;
+  }
 }
 
 function getReviewLink() {
