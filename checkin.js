@@ -1,5 +1,5 @@
 // =====================================
-// CHECK-IN ENGINE (FINAL)
+// CHECK-IN ENGINE (FINAL – no required fields)
 // =====================================
 
 let selectedRooms = [];
@@ -22,7 +22,6 @@ function bindCheckinEvents() {
   const closeBtns = document.querySelectorAll("[data-close]");
   closeBtns.forEach(btn => btn.addEventListener("click", () => closeModal(btn.dataset.close)));
 
-  // Ensure the submit event is attached
   if (checkinForm) {
     checkinForm.addEventListener("submit", submitCheckin);
   }
@@ -69,7 +68,7 @@ function addGuestEntry() {
   const newEntry = document.createElement("div");
   newEntry.className = "guest-entry";
   newEntry.innerHTML = `
-    <input type="text" class="guest-name" placeholder="Full Name *" required>
+    <input type="text" class="guest-name" placeholder="Full Name *">
     <input type="text" class="guest-aadhaar" placeholder="Aadhaar Number">
     <input type="email" class="guest-email" placeholder="Email">
     <input type="tel" class="guest-phone" placeholder="Phone Number">
@@ -110,7 +109,7 @@ function openCheckinModal() {
   if (container) {
     container.innerHTML = `
       <div class="guest-entry">
-        <input type="text" class="guest-name" placeholder="Full Name *" required>
+        <input type="text" class="guest-name" placeholder="Full Name *">
         <input type="text" class="guest-aadhaar" placeholder="Aadhaar Number">
         <input type="email" class="guest-email" placeholder="Email">
         <input type="tel" class="guest-phone" placeholder="Phone Number">
@@ -207,7 +206,7 @@ function resetCheckinForm() {
   if (container) {
     container.innerHTML = `
       <div class="guest-entry">
-        <input type="text" class="guest-name" placeholder="Full Name *" required>
+        <input type="text" class="guest-name" placeholder="Full Name *">
         <input type="text" class="guest-aadhaar" placeholder="Aadhaar Number">
         <input type="email" class="guest-email" placeholder="Email">
         <input type="tel" class="guest-phone" placeholder="Phone Number">
