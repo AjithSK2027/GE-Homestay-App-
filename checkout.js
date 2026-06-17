@@ -1,5 +1,5 @@
 // =====================================
-// CHECKOUT ENGINE (FINAL WITH WHATSAPP)
+// CHECKOUT ENGINE (FINAL)
 // =====================================
 
 let currentBooking = null;
@@ -130,16 +130,18 @@ async function completeCheckoutProcess() {
     payment_method: document.getElementById("paymentMethodCheckout").value,
     advance_paid: checkoutState.advancePaid,
     received_by: receivedBy,
-    note: checkoutNotes || currentBooking.note || "",   // 👈 Notes here
+    note: checkoutNotes || currentBooking.note || "",
     check_out_date: checkoutDateTime
   };
 
   const result = await completeCheckout(payload);
-  if (result) {
+  if (result && result.success !== false) {
     sendOwnerCheckoutMessage(currentBooking, payload);
     showSuccessToast("Checkout Complete");
     closeCheckoutModal();
     if (typeof loadDashboard === "function") await loadDashboard();
+  } else {
+    showToast("Checkout failed");
   }
 }
 
@@ -148,11 +150,11 @@ function closeCheckoutModal() {
   if (modal) modal.classList.remove("active");
 }
 
-// ===== WHATSAPP CHECKOUT MESSAGE =====
+// WhatsApp Check‑out Message
 function sendOwnerCheckoutMessage(booking, payload) {
   if (!CONFIG.OWNER_PHONE) return;
   
-  const msg = 
+  const msg =
 `🏡 GOOD EARTH HOMESTAY
 
 ✅ Check-Out Completed
