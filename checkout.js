@@ -107,6 +107,8 @@ function updateCheckoutSummary() {
 async function completeCheckoutProcess() {
   const checkoutDateTime = document.getElementById("checkoutDateTime").value;
   const receivedBy = document.getElementById("receivedByCheckout").value;
+  const checkoutNotes = document.getElementById("checkoutNotes").value;
+  
   if (!checkoutDateTime) { showToast("Select check-out date & time"); return; }
   if (!receivedBy) { showToast("Enter staff name who received payment"); return; }
 
@@ -128,7 +130,7 @@ async function completeCheckoutProcess() {
     payment_method: document.getElementById("paymentMethodCheckout").value,
     advance_paid: checkoutState.advancePaid,
     received_by: receivedBy,
-    note: currentBooking.note,
+    note: checkoutNotes || currentBooking.note || "",   // 👈 Notes here
     check_out_date: checkoutDateTime
   };
 
