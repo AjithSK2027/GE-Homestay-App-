@@ -1,5 +1,5 @@
 // =====================================
-// CHECK-IN ENGINE (FINAL WITH WHATSAPP)
+// CHECK-IN ENGINE (FINAL)
 // =====================================
 
 let selectedRooms = [];
@@ -7,6 +7,10 @@ let checkinForm = null;
 
 function initializeCheckin() {
   checkinForm = document.getElementById("checkinForm");
+  if (!checkinForm) {
+    console.error("checkinForm not found!");
+    return;
+  }
   bindCheckinEvents();
   loadAvailableRooms();
 }
@@ -14,9 +18,14 @@ function initializeCheckin() {
 function bindCheckinEvents() {
   const fab = document.getElementById("fab");
   if (fab) fab.addEventListener("click", openCheckinModal);
+
   const closeBtns = document.querySelectorAll("[data-close]");
   closeBtns.forEach(btn => btn.addEventListener("click", () => closeModal(btn.dataset.close)));
-  if (checkinForm) checkinForm.addEventListener("submit", submitCheckin);
+
+  // Ensure the submit event is attached
+  if (checkinForm) {
+    checkinForm.addEventListener("submit", submitCheckin);
+  }
 }
 
 async function loadAvailableRooms() {
@@ -37,7 +46,7 @@ async function loadAvailableRooms() {
       container.appendChild(card);
     });
   } catch (error) {
-    console.error(error);
+    console.error("Room load error:", error);
     showToast("Could not load rooms");
   }
 }
@@ -56,6 +65,7 @@ function toggleRoom(roomName, card) {
 
 function addGuestEntry() {
   const container = document.getElementById("guestsContainer");
+  if (!container) return;
   const newEntry = document.createElement("div");
   newEntry.className = "guest-entry";
   newEntry.innerHTML = `
@@ -143,18 +153,18 @@ async function submitCheckin(event) {
   const payload = {
     guest_name: primaryGuest.name,
     phone_number: primaryGuest.phone,
-    email_id: document.getElementById("emailId").value,
-    aadhaar_number: document.getElementById("aadhaarNumber").value,
+    email_id: document.getElementById("emailId")?.value || "",
+    aadhaar_number: document.getElementById("aadhaarNumber")?.value || "",
     guests_json: JSON.stringify(allGuests),
     room_type: selectedRooms.join(","),
-    guests_count: Number(document.getElementById("guestCount").value),
-    nights: Number(document.getElementById("nights").value),
-    meal_plan: document.getElementById("mealPlan").value,
-    advance_paid: Number(document.getElementById("advancePaid").value || 0),
-    advance_payment_mode: document.getElementById("paymentMode").value,
-    advance_received_by: document.getElementById("advanceReceivedBy").value,
-    check_in_date: document.getElementById("checkinDateTime").value,
-    note: document.getElementById("notes").value
+    guests_count: Number(document.getElementById("guestCount")?.value || 0),
+    nights: Number(document.getElementById("nights")?.value || 0),
+    meal_plan: document.getElementById("mealPlan")?.value || "EP",
+    advance_paid: Number(document.getElementById("advancePaid")?.value || 0),
+    advance_payment_mode: document.getElementById("paymentMode")?.value || "",
+    advance_received_by: document.getElementById("advanceReceivedBy")?.value || "",
+    check_in_date: document.getElementById("checkinDateTime")?.value || "",
+    note: document.getElementById("notes")?.value || ""
   };
 
   if (!validateCheckin(payload)) {
@@ -165,16 +175,18 @@ async function submitCheckin(event) {
 
   try {
     const result = await createCheckin(payload);
-    if (result) {
+    if (result && result.success !== false) {
       sendOwnerCheckinMessage(payload, allGuests);
       resetCheckinForm();
       closeModal("checkinModal");
       if (typeof loadDashboard === "function") await loadDashboard();
       await loadAvailableRooms();
       showSuccessToast("Checked In Successfully");
-    } else throw new Error("API returned false");
+    } else {
+      throw new Error("API returned failure");
+    }
   } catch (error) {
-    console.error(error);
+    console.error("Check-in error:", error);
     showToast("Check-in failed. Check connection.");
   } finally {
     submitBtn.disabled = false;
@@ -201,12 +213,11 @@ function resetCheckinForm() {
   }
 }
 
-// ===== WHATSAPP CHECK-IN MESSAGE (UPDATED) =====
+// WhatsApp Check‑in Message
 function sendOwnerCheckinMessage(booking, guestsList) {
   if (!CONFIG.OWNER_PHONE) return;
-  
   let guestSummary = guestsList.map(g => `${g.name} (${g.phone})`).join("\n");
-  const msg = 
+  const msg =
 `🏡 GOOD EARTH HOMESTAY
 
 ✅ New Check-In
